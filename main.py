@@ -6,3 +6,4 @@ with open("fisier.txt", "r") as f:
     d=dictionary(sections,file)
     test_start_final(d) 
     test_delta(d)
+#linie 
