@@ -25,7 +25,9 @@ def dictionary(sections, file):
     the value is a list formed of the lines after the section in the file
     """
     if len(sections) != len(set(sections)):
-        print("Equal Sections")
+        d = {}
+        print("Similar sections detected!")
+        return d
     else:
         print("Sections verified!")
         d = {}
@@ -39,6 +41,7 @@ def dictionary(sections, file):
                 section = line.lower()
     return d
 
+
 def get_sigma(d):
     """
     get_sigma is processing a dictionary and verifies if [sigma] section exists
@@ -47,7 +50,7 @@ def get_sigma(d):
     """
     if "[sigma]".lower() not in d.keys():
         print("Sigma wrongly defined")
-        return False
+        return set()
     return set(d["[sigma]"])
 
 
@@ -59,8 +62,16 @@ def get_states(d):
     """
     if "[states]".lower() not in d.keys():
         print("states wrongly defined")
-        return False
+        return set()
     return set(d["[states]"])
+
+
+def test_sigma(d):
+    if "[sigma]".lower() not in d.keys():
+        print("Sigma wrongly defined")
+        return False
+    print("Sigma verified!")
+    return True
 
 
 def test_start_final(d):
@@ -69,19 +80,22 @@ def test_start_final(d):
     :param d: type dictionary
     :return: it returns True if start and final states are correctly defined
     """
+    errors = 0
     if len(d["[start]"]) != 1:
         print("Start wrongly defined (more than 1 state)")
-        return False
+        errors += 1
     if d["[final]"] == []:
         print("Final wrongly defined (no final state)")
-        return False
+        errors += 1
     states = set(get_states(d))
 
     if set(d["[start]"]).issubset(states) == False:
         print("Start is not a subset of states")
-        return False
+        errors += 1
     if set(d["[final]"]).issubset(states) == False:
         print("Final is not a subset of states")
+        errors += 1
+    if errors:
         return False
     print("Start and Final verified!")
     return True
@@ -95,7 +109,7 @@ def get_start(d):
     """
     if "[start]" not in d.keys():
         print("Start wrongly defined")
-        return False
+        return set()
     return set(d["[start]"])
 
 
@@ -107,7 +121,7 @@ def get_final(d):
     """
     if "[final]" not in d.keys():
         print("Final states wrongly defined")
-        return False
+        return set()
     return set(d["[final]"])
 
 
@@ -123,7 +137,8 @@ def get_delta(d):
     """
     if "[delta]" not in d.keys():
         print("Delta wrongly defined")
-        return False
+        delta_matrix = []
+        return delta_matrix
     delta_matrix = [x.split(",") for x in d["[delta]"]]
     return delta_matrix
 
@@ -136,17 +151,31 @@ def test_delta(d):
     """
     mat = get_delta(d)
     rows = len(mat)
-    columns = len(mat[0])
-    mat_transposed = [[mat[i][j] for i in range(0, rows)] for j in range(0, columns)]
-    states = mat_transposed[0]
-    states.extend(mat_transposed[2])
-    states = set(states)
-    alphabet = set(mat_transposed[1])
-    if states.issubset(get_states(d)) == False:
-        print("States of Delta wrongly defined")
+    if rows:
+        errors = 0
+        columns = len(mat[0])
+        mat_transposed = [[mat[i][j]
+                           for i in range(0, rows)] for j in range(0, columns)]
+        states = mat_transposed[0]
+        states.extend(mat_transposed[2])
+        states = set(states)
+        alphabet = set(mat_transposed[1])
+        if states.issubset(get_states(d)) == False:
+            print("States of Delta wrongly defined")
+            errors += 1
+        if alphabet.issubset(get_sigma(d)) == False:
+            print("Alphabet of Delta wrongly defined")
+            errors += 1
+
+        if get_start(d).intersection(set(mat_transposed[0])) == set():
+            print("Start state missing from delta configuration")
+            errors += 1
+        if get_final(d).intersection(set(mat_transposed[2])) == set():
+            print("Final state(s) missing from delta configuration")
+            errors += 1
+
+        if not errors:
+            print("Delta verified!")
+            return True
         return False
-    if alphabet.issubset(get_sigma(d)) == False:
-        print("Alphabet of Delta wrongly defined")
-        return False
-    print("Delta Ready")
-    return True
+    return False
