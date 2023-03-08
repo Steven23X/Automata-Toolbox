@@ -1,3 +1,5 @@
+#get methods
+
 def get_file(file):
     """
     get_file is processing a file and eliminates comments, new line characters and empty lines
@@ -6,7 +8,6 @@ def get_file(file):
     """
     return [x.strip() for x in file if x[0] != '#' and len(x) > 1]
 
-
 def get_section(file):
     """
     get_section is processing a file and searches for [section] lines
@@ -14,33 +15,6 @@ def get_section(file):
     :return: it returns a list in which every element is a section of the file
     """
     return [x.lower() for x in file if x[0] == "[" and x[len(x)-1] == ']']
-
-
-def dictionary(sections, file):
-    """
-    dictionary verifies if the sections are correctly defined and creates a dictionary
-    :param sections: type list
-    :param file: type file
-    :return: it returns a dictionary where the key is the string section and
-    the value is a list formed of the lines after the section in the file
-    """
-    if len(sections) != len(set(sections)):
-        d = {}
-        print("Similar sections detected!")
-        return d
-    else:
-        print("Sections verified!")
-        d = {}
-        section = file[0].lower()
-        d[section] = []
-        for line in file[1:]:
-            if line[0] != "[":
-                d[section].append(line)
-            else:
-                d[line.lower()] = []
-                section = line.lower()
-    return d
-
 
 def get_sigma(d):
     """
@@ -53,7 +27,6 @@ def get_sigma(d):
         return set()
     return set(d["[sigma]"])
 
-
 def get_states(d):
     """
     get_states is processing a dictionary and verifies if [states] section exists
@@ -65,8 +38,53 @@ def get_states(d):
         return set()
     return set(d["[states]"])
 
+def get_start(d):
+    """
+    get_start is processing a dictionary and verifies if [start] section exists
+    :param d: type dictionary
+    :return: it returns the start state from the dictionary as a set
+    """
+    if "[start]" not in d.keys():
+        print("Start wrongly defined")
+        return set()
+    return set(d["[start]"])
+
+def get_final(d):
+    """
+    get_final is processing a dictionary and verifies if [final] section exists
+    :param d: type dictionary
+    :return: it returns the final state from the dictionary as a set
+    """
+    if "[final]" not in d.keys():
+        print("Final states wrongly defined")
+        return set()
+    return set(d["[final]"])
+
+def get_delta(d):
+    """
+    get_delta is processing a dictionary and verifies if [delta] section exists
+    :param d: type dictionary
+    :return: it returns a list in which every element is a line of the [delta] section
+             elem[0]=input state
+             elem[1]=letter from [sigma] section
+             elem[2]=output state
+             elem[0] X elem[1] -> elem[2]
+    """
+    if "[delta]" not in d.keys():
+        print("Delta wrongly defined")
+        delta_matrix = []
+        return delta_matrix
+    delta_matrix = [x.split(",") for x in d["[delta]"]]
+    return delta_matrix
+
+#test methods
 
 def test_sigma(d):
+    """
+    test_sigma verifies the [sigma] section
+    :param d: type dictionary
+    :return: it returns True if [sigma] section is correctly defined
+    """
     if "[sigma]".lower() not in d.keys():
         print("Sigma wrongly defined")
         return False
@@ -99,49 +117,6 @@ def test_start_final(d):
         return False
     print("Start and Final verified!")
     return True
-
-
-def get_start(d):
-    """
-    get_start is processing a dictionary and verifies if [start] section exists
-    :param d: type dictionary
-    :return: it returns the start state from the dictionary as a set
-    """
-    if "[start]" not in d.keys():
-        print("Start wrongly defined")
-        return set()
-    return set(d["[start]"])
-
-
-def get_final(d):
-    """
-    get_final is processing a dictionary and verifies if [final] section exists
-    :param d: type dictionary
-    :return: it returns the final state from the dictionary as a set
-    """
-    if "[final]" not in d.keys():
-        print("Final states wrongly defined")
-        return set()
-    return set(d["[final]"])
-
-
-def get_delta(d):
-    """
-    get_delta is processing a dictionary and verifies if [delta] section exists
-    :param d: type dictionary
-    :return: it returns a list in which every element is a line of the [delta] section
-             elem[0]=input state
-             elem[1]=letter from [sigma] section
-             elem[2]=output state
-             elem[0] X elem[1] -> elem[2]
-    """
-    if "[delta]" not in d.keys():
-        print("Delta wrongly defined")
-        delta_matrix = []
-        return delta_matrix
-    delta_matrix = [x.split(",") for x in d["[delta]"]]
-    return delta_matrix
-
 
 def test_delta(d):
     """
@@ -179,3 +154,31 @@ def test_delta(d):
             return True
         return False
     return False
+
+#dictionary method
+
+def dictionary(sections, file):
+    """
+    dictionary verifies if the sections are correctly defined and creates a dictionary
+    :param sections: type list
+    :param file: type file
+    :return: it returns a dictionary where the key is the string section and
+    the value is a list formed of the lines after the section in the file
+    """
+    if len(sections) != len(set(sections)):
+        d = {}
+        print("Similar sections detected!")
+        return d
+    else:
+        print("Sections verified!")
+        d = {}
+        section = file[0].lower()
+        d[section] = []
+        for line in file[1:]:
+            if line[0] != "[":
+                d[section].append(line)
+            else:
+                d[line.lower()] = []
+                section = line.lower()
+    return d
+
