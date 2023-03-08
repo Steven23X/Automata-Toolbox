@@ -1,5 +1,6 @@
 import library as lib
-with open("input.txt", "r") as f:
+import os
+with open(os.path.abspath('Files/input.txt'), "r") as f:
     content = f.readlines()
     file = lib.get_file(content)
     sections = lib.get_section(file)

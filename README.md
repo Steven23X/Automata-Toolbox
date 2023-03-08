@@ -1,1 +1,1 @@
-# Theory_of_Computaion_Projects
+# Theory_of_Computation_Projects
