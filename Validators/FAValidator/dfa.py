@@ -1,4 +1,4 @@
-import library as lib
+import Libraries.library as lib
 import os
 with open(os.path.abspath('Files/input.txt'), "r") as f:
     content = f.readlines()
