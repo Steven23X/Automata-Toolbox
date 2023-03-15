@@ -17,7 +17,7 @@ class App(customtkinter.CTk):
         self.output_text=customtkinter.CTkTextbox(self,width=400,height=500,font=('Times New Roman',17,'bold'))
         self.output_text.configure(state="disabled")
         self.f1=customtkinter.CTkFrame(self)
-        self.test_button = customtkinter.CTkButton(self.f1, text="FA VALIDATOR",command=self.runfavalidator,font=('Times New Roman',17,'bold'))
+        self.test_button = customtkinter.CTkButton(self.f1, text="DFA VALIDATOR",command=self.rundfavalidator,font=('Times New Roman',17,'bold'))
         self.clear_button = customtkinter.CTkButton(self.f1, text="CLEAR ALL",command=self.clearall,font=('Times New Roman',17,'bold'))
         self.openfile_button = customtkinter.CTkButton(self.f1, text="FILE SAMPLE",command=self.filesample,font=('Times New Roman',17,'bold'))
         self.input_frame.grid(row=0,column=0,padx=20,pady=10)
@@ -40,7 +40,7 @@ class App(customtkinter.CTk):
         self.input_text.insert(customtkinter.END, content)
         text_file.close()
 
-    def runfavalidator(self):
+    def rundfavalidator(self):
         self.output_text.configure(state="normal")
         self.output_text.delete("1.0","end")
         text_file = open(os.path.abspath('Files/input.txt'), "w")

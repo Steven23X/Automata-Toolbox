@@ -137,19 +137,19 @@ def get_delta(d):
     """
     if "[delta]" not in d.keys():
         print("Delta wrongly defined")
-        delta_dict ={}
+        delta_dict = {}
         return delta_dict
-    delta_dict={}
-    rows=list(map(lambda x:x.split(","),d['[delta]'])) 
+    delta_dict = {}
+    rows = list(map(lambda x: x.split(","), d['[delta]']))
     for line in rows:
-        state1=line[0]
-        with_sigma_to=line[1]
-        state2=line[2]
+        state1 = line[0]
+        with_sigma_to = line[1]
+        state2 = line[2]
         if state1 not in delta_dict:
-            delta_dict[state1]={}
-            delta_dict[state1][with_sigma_to]={state2}
+            delta_dict[state1] = {}
+            delta_dict[state1][with_sigma_to] = {state2}
         elif with_sigma_to not in delta_dict[state1]:
-            delta_dict[state1][with_sigma_to]={state2}
+            delta_dict[state1][with_sigma_to] = {state2}
         else:
             delta_dict[state1][with_sigma_to].add(state2)
     return delta_dict
@@ -162,21 +162,21 @@ def test_delta(d):
     :return: it returns True if [delta] section is correctly defined
     """
     delta_dict = get_delta(d)
-    if len(list(delta_dict.items()))==0:
+    if len(list(delta_dict.items())) == 0:
         return False
     else:
         errors = 0
         states = set(delta_dict.keys())
-        alphabet=set()
-        states2=set()
+        alphabet = set()
+        states2 = set()
         for state in list(states):
-            keys=set(delta_dict[state].keys())
-            values=set()
-            for el in list(delta_dict[state].values()): 
+            keys = set(delta_dict[state].keys())
+            values = set()
+            for el in list(delta_dict[state].values()):
                 values.update(el)
             states2.update(values)
             alphabet.update(keys)
-        ALL_STATES=states.union(states2)
+        ALL_STATES = states.union(states2)
         if ALL_STATES.issubset(get_states(d)) == False:
             print("States of Delta wrongly defined")
             errors += 1
@@ -196,16 +196,23 @@ def test_delta(d):
             return True
         return False
 
-def input_test(string,d):
-    delta_dict=get_delta(d)
-    last_state=list(get_start(d))[0]
-    sigma_set=list(get_sigma(d))
+
+def string_validator(string, d):
+    """
+    string_validator verifies if the DFA accepts the string
+    :param string: type string
+    :param d: type dictionary
+    :return: it returns True if string is accepted
+    """
+    delta_dict = get_delta(d)
+    last_state = list(get_start(d))[0]
+    sigma_set = list(get_sigma(d))
     for sigma in string:
         if sigma not in sigma_set:
-            print("String wrongly defined!")
+            print("String rejected!")
             return False
-        last_state=delta_dict[last_state][sigma]
-        last_state=list(last_state)[0]
+        last_state = delta_dict[last_state][sigma]
+        last_state = list(last_state)[0]
     if last_state in list(get_final(d)):
         print("String accepted!")
         return True

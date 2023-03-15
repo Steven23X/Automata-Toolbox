@@ -12,5 +12,4 @@ with open(os.path.abspath('Files/input.txt'), "r") as f:
 if T:
     with open(os.path.abspath('Files/string.txt'), "r") as f:
         input_string=f.readline().strip()
-        lib.input_test(input_string,d)
-
+        lib.string_validator(input_string,d)
