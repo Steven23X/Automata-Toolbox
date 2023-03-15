@@ -7,7 +7,8 @@ class App(customtkinter.CTk):
         self.geometry("1100x600")
         self.resizable(False,False)
         self.title("Automaton")
-
+        customtkinter.set_appearance_mode("dark")
+        customtkinter.set_default_color_theme("dark-blue") 
         self.input_frame=customtkinter.CTkFrame(self)
         self.label_input=customtkinter.CTkLabel(self.input_frame,text="INPUT:",corner_radius=8,font=('Times New Roman',17,'bold'))
         self.input_text=customtkinter.CTkTextbox(self,width=400,height=500,font=('Times New Roman',17,'bold'))
