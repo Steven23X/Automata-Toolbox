@@ -8,4 +8,9 @@ with open(os.path.abspath('Files/input.txt'), "r") as f:
     if len(d):
         lib.test_sigma(d)
         lib.test_start_final(d)
-        lib.test_delta(d)
+        T=lib.test_delta(d)
+if T:
+    with open(os.path.abspath('Files/string.txt'), "r") as f:
+        input_string=f.readline().strip()
+        lib.input_test(input_string,d)
+

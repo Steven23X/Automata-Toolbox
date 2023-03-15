@@ -152,9 +152,6 @@ def get_delta(d):
             delta_dict[state1][with_sigma_to]={state2}
         else:
             delta_dict[state1][with_sigma_to].add(state2)
-    #delta_dict={state:{sigma:set() for sigma in get_sigma(d)} for state in get_states(d)}
-    #ce frumoasa era asta de sus, dar pacat ca am cazuri de cacat de testat
-    #print(delta_dict)
     return delta_dict
 
 
@@ -175,12 +172,10 @@ def test_delta(d):
         for state in list(states):
             keys=set(delta_dict[state].keys())
             values=set()
-            for el in list(delta_dict[state].values()): #el e un set cu un elemet cel putin la astea deteerministe
+            for el in list(delta_dict[state].values()): 
                 values.update(el)
             states2.update(values)
             alphabet.update(keys)
-        #print(alphabet)
-        #print(states)
         ALL_STATES=states.union(states2)
         if ALL_STATES.issubset(get_states(d)) == False:
             print("States of Delta wrongly defined")
@@ -200,3 +195,15 @@ def test_delta(d):
             print("Delta verified!")
             return True
         return False
+
+def input_test(string,d):
+    delta_dict=get_delta(d)
+    last_state=list(get_start(d))[0]
+    for sigma in string:
+        last_state=delta_dict[last_state][sigma]
+        last_state=list(last_state)[0]
+    if last_state in list(get_final(d)):
+        print("String accepted!")
+        return True
+    print("String rejected!")
+    return False

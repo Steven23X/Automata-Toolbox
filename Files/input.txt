@@ -1,5 +1,15 @@
 [Sigma]
+0
+1
 [States]
+q1
+q2
 [Delta]
+q1,0,q2
+q2,0,q1
+q1,1,q1
+q2,1,q2
 [Start]
+q1
 [Final]
+q1
