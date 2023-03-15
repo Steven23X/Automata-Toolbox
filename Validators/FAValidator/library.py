@@ -199,7 +199,11 @@ def test_delta(d):
 def input_test(string,d):
     delta_dict=get_delta(d)
     last_state=list(get_start(d))[0]
+    sigma_set=list(get_sigma(d))
     for sigma in string:
+        if sigma not in sigma_set:
+            print("String wrongly defined!")
+            return False
         last_state=delta_dict[last_state][sigma]
         last_state=list(last_state)[0]
     if last_state in list(get_final(d)):

@@ -12,4 +12,4 @@ q2,1,q2
 [Start]
 q1
 [Final]
-q1
+q2
