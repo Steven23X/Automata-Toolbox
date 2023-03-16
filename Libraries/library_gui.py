@@ -35,8 +35,10 @@ class App(customtkinter.CTk):
 
         # middle frame (buttons)
         self.f1 = customtkinter.CTkFrame(self)
-        self.test_button = customtkinter.CTkButton(
+        self.test_button1 = customtkinter.CTkButton(
             self.f1, text="DFA VALIDATOR", command=self.rundfavalidator, font=('Times New Roman', 17, 'bold'))
+        self.test_button2 = customtkinter.CTkButton(
+            self.f1, text="NFA VALIDATOR", command=self.runnfavalidator, font=('Times New Roman', 17, 'bold'))
         self.clear_button = customtkinter.CTkButton(
             self.f1, text="CLEAR ALL", command=self.clearall, font=('Times New Roman', 17, 'bold'))
         self.openfile_button = customtkinter.CTkButton(
@@ -49,7 +51,8 @@ class App(customtkinter.CTk):
         self.openfile_button.pack(side=customtkinter.TOP, padx=20, pady=10)
 
         # packing items
-        self.test_button.pack(side=customtkinter.TOP, padx=20, pady=10)
+        self.test_button1.pack(side=customtkinter.TOP, padx=20, pady=10)
+        self.test_button2.pack(side=customtkinter.TOP, padx=20, pady=10)
         self.clear_button.pack(side=customtkinter.TOP, padx=20, pady=10)
         self.label_input1.pack()
         self.input_text.pack()
@@ -86,6 +89,21 @@ class App(customtkinter.CTk):
         redirector changes the stdout -> output_text
         """
         self.output_text.insert(customtkinter.INSERT, inputStr)
+
+    def runnfavalidator(self):
+        """
+        rundfavalidator runs nfa.py
+        """
+        self.output_text.configure(state="normal")
+        self.output_text.delete("1.0", "end")
+        text_file = open(os.path.abspath('Files/input.txt'), "w")
+        text_file.write(self.input_text.get(1.0, customtkinter.END))
+        text_file.close()
+        text_file = open(os.path.abspath('Files/string.txt'), "w")
+        text_file.write(self.input_string.get(1.0, customtkinter.END))
+        text_file.close()
+        exec(open(os.path.abspath('Validators/nfa.py')).read())
+        self.output_text.configure(state="disabled")
 
     def rundfavalidator(self):
         """
