@@ -211,8 +211,12 @@ def string_validator(string, d):
         if sigma not in sigma_set:
             print("String rejected!")
             return False
-        last_state = delta_dict[last_state][sigma]
-        last_state = list(last_state)[0]
+        if sigma in delta_dict[last_state]:
+            last_state = delta_dict[last_state][sigma]
+            last_state = list(last_state)[0]
+        else:
+            continue
+
     if last_state in list(get_final(d)):
         print("String accepted!")
         return True
