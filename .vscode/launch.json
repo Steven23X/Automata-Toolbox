@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "App.main",
             "justMyCode": true,
-            "env":{
+            "env": {
                 "PYTHONPATH": "${workspaceFolder}/../Libraries"
             }
         }

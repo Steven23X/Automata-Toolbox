@@ -6,9 +6,9 @@ with open(os.path.abspath('Files/input.txt'), "r") as f:
     sections = lib.get_section(file)
     d = lib.dictionary(sections, file)
     if len(d):
-        t1=lib.test_sigma(d)
-        t2=lib.test_start_final(d)
-        t3=lib.test_delta(d)
+        t1 = lib.test_sigma(d)
+        t2 = lib.test_start_final(d)
+        t3 = lib.test_delta(d)
 print("___________________________________________")
 print()
 if t1 and t2 and t3:
@@ -18,8 +18,8 @@ if t1 and t2 and t3:
     print("Status:")
     print()
     with open(os.path.abspath('Files/string.txt'), "r") as f:
-        input_string=f.readline().strip()
-        lib.string_validator(input_string,d)
+        input_string = f.readline().strip()
+        lib.string_validator(input_string, d)
 else:
     print("DFA is NOT Valid!")
 print()
