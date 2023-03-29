@@ -197,7 +197,7 @@ def test_delta(d):
         return False
 
 
-def string_validator(d, string):
+def string_validator(string,d):
     delta_dict = get_delta(d)
     current_states = get_start(d)  # incepem de la start
     for symbol in string:
