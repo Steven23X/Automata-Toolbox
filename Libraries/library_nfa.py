@@ -197,24 +197,44 @@ def test_delta(d):
         return False
 
 
-def string_validator(string, d):
-    """
-    string_validator verifies if the DFA accepts the string
-    :param string: type string
-    :param d: type dictionary
-    :return: it returns True if string is accepted
-    """
-    delta_dict = get_delta(d)
-    last_state = list(get_start(d))[0]
-    sigma_set = list(get_sigma(d))
-    for sigma in string:
-        if sigma not in sigma_set:
-            print("String rejected!")
-            return False
-        last_state = delta_dict[last_state][sigma]
-        last_state = list(last_state)[0]
-    if last_state in list(get_final(d)):
+def string_validator(d,string):
+    delta_dict=get_delta(d)
+    current_states=get_start(d) # incepem de la start
+    for symbol in string:
+        new_states = set()
+        for state in current_states:
+            if '$' in delta_dict[state]:
+                new_states |= delta_dict[state]['$'] # adaugam la new_states ca sa nu stricam current_states cat timp este iterat
+        current_states|=new_states#daca avem string adaugam la starile curente starile din epsilon daca exista
+        new_states=set()
+        for state in current_states: #luam starile de pe nivelul curent
+            if state in delta_dict and symbol in delta_dict[state]: #daca accepta simbolul
+                new_states|=delta_dict[state][symbol] #adaugam la nivelul nou
+        current_states=new_states #trecem la nivelul nou
+    current_states&=get_final
+    if bool(current_states):
         print("String accepted!")
         return True
-    print("String rejected!")
+    print("String rejected")
     return False
+# def string_validator(string, d):
+#     """
+#     string_validator verifies if the DFA accepts the string
+#     :param string: type string
+#     :param d: type dictionary
+#     :return: it returns True if string is accepted
+#     """
+#     delta_dict = get_delta(d)
+#     last_state = list(get_start(d))[0]
+#     sigma_set = list(get_sigma(d))
+#     for sigma in string:
+#         if sigma not in sigma_set:
+#             print("String rejected!")
+#             return False
+#         last_state = delta_dict[last_state][sigma]
+#         last_state = list(last_state)[0]
+#     if last_state in list(get_final(d)):
+#         print("String accepted!")
+#         return True
+#     print("String rejected!")
+#     return False
