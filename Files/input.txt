@@ -1,5 +1,1 @@
-[Sigma]
-[States]
-[Delta]
-[Start]
-[Final]
+

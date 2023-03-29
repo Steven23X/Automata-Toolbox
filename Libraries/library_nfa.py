@@ -197,21 +197,25 @@ def test_delta(d):
         return False
 
 
-def string_validator(d,string):
-    delta_dict=get_delta(d)
-    current_states=get_start(d) # incepem de la start
+def string_validator(d, string):
+    delta_dict = get_delta(d)
+    current_states = get_start(d)  # incepem de la start
     for symbol in string:
         new_states = set()
         for state in current_states:
             if '$' in delta_dict[state]:
-                new_states |= delta_dict[state]['$'] # adaugam la new_states ca sa nu stricam current_states cat timp este iterat
-        current_states|=new_states#daca avem string adaugam la starile curente starile din epsilon daca exista
-        new_states=set()
-        for state in current_states: #luam starile de pe nivelul curent
-            if state in delta_dict and symbol in delta_dict[state]: #daca accepta simbolul
-                new_states|=delta_dict[state][symbol] #adaugam la nivelul nou
-        current_states=new_states #trecem la nivelul nou
-    current_states&=get_final
+                # adaugam la new_states ca sa nu stricam current_states cat timp este iterat
+                new_states |= delta_dict[state]['$']
+        # daca avem string adaugam la starile curente starile din epsilon daca exista
+        current_states |= new_states
+        new_states = set()
+        for state in current_states:  # luam starile de pe nivelul curent
+            # daca accepta simbolul
+            if state in delta_dict and symbol in delta_dict[state]:
+                # adaugam la nivelul nou
+                new_states |= delta_dict[state][symbol]
+        current_states = new_states  # trecem la nivelul nou
+    current_states &= get_final
     if bool(current_states):
         print("String accepted!")
         return True
