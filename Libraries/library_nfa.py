@@ -51,7 +51,7 @@ def get_sigma(d):
     if "[sigma]".lower() not in d.keys():
         print("Sigma wrongly defined")
         return set()
-    return set(d["[sigma]"])
+    return set(d["[sigma]"])|set('$')
 
 
 def get_states(d):
@@ -152,6 +152,9 @@ def get_delta(d):
             delta_dict[state1][with_sigma_to] = {state2}
         else:
             delta_dict[state1][with_sigma_to].add(state2)
+    for state in get_states(d): # add states that do not have symbols attached to them
+        if state not in delta_dict:
+            delta_dict[state]={}
     return delta_dict
 
 
@@ -215,7 +218,7 @@ def string_validator(string,d):
                 # adaugam la nivelul nou
                 new_states |= delta_dict[state][symbol]
         current_states = new_states  # trecem la nivelul nou
-    current_states &= get_final
+    current_states &= get_final(d)
     if bool(current_states):
         print("String accepted!")
         return True
