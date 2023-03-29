@@ -1,12 +1,1 @@
-[Sigma]
-0
-1
-[States]
-q1
-q2
-[Delta]
-q1,1,q2
-[Start]
-q1
-[Final]
-q2
+.

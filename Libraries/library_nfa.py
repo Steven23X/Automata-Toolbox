@@ -51,7 +51,7 @@ def get_sigma(d):
     if "[sigma]".lower() not in d.keys():
         print("Sigma wrongly defined")
         return set()
-    return set(d["[sigma]"])|set('$')
+    return set(d["[sigma]"]) | set('$')
 
 
 def get_states(d):
@@ -152,9 +152,10 @@ def get_delta(d):
             delta_dict[state1][with_sigma_to] = {state2}
         else:
             delta_dict[state1][with_sigma_to].add(state2)
-    for state in get_states(d): # add states that do not have symbols attached to them
+    # add states that do not have symbols attached to them
+    for state in get_states(d):
         if state not in delta_dict:
-            delta_dict[state]={}
+            delta_dict[state] = {}
     return delta_dict
 
 
@@ -200,48 +201,31 @@ def test_delta(d):
         return False
 
 
-def string_validator(string,d):
+def string_validator(string, d):
+    """
+    string_validator verifies if the NFA accepts the string
+    :param string: type string
+    :param d: type dictionary
+    :return: it returns True if string is accepted
+    """
     delta_dict = get_delta(d)
-    current_states = get_start(d)  # incepem de la start
+    current_states = get_start(d)
+
     for symbol in string:
         new_states = set()
         for state in current_states:
             if '$' in delta_dict[state]:
-                # adaugam la new_states ca sa nu stricam current_states cat timp este iterat
                 new_states |= delta_dict[state]['$']
-        # daca avem string adaugam la starile curente starile din epsilon daca exista
         current_states |= new_states
         new_states = set()
-        for state in current_states:  # luam starile de pe nivelul curent
-            # daca accepta simbolul
+        for state in current_states:
             if state in delta_dict and symbol in delta_dict[state]:
-                # adaugam la nivelul nou
                 new_states |= delta_dict[state][symbol]
-        current_states = new_states  # trecem la nivelul nou
+        current_states = new_states
     current_states &= get_final(d)
+
     if bool(current_states):
         print("String accepted!")
         return True
-    print("String rejected")
+    print("String rejected!")
     return False
-# def string_validator(string, d):
-#     """
-#     string_validator verifies if the DFA accepts the string
-#     :param string: type string
-#     :param d: type dictionary
-#     :return: it returns True if string is accepted
-#     """
-#     delta_dict = get_delta(d)
-#     last_state = list(get_start(d))[0]
-#     sigma_set = list(get_sigma(d))
-#     for sigma in string:
-#         if sigma not in sigma_set:
-#             print("String rejected!")
-#             return False
-#         last_state = delta_dict[last_state][sigma]
-#         last_state = list(last_state)[0]
-#     if last_state in list(get_final(d)):
-#         print("String accepted!")
-#         return True
-#     print("String rejected!")
-#     return False
