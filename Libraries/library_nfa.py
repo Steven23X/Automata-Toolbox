@@ -156,6 +156,11 @@ def get_delta(d):
     for state in get_states(d):
         if state not in delta_dict:
             delta_dict[state] = {}
+        for symbol in get_sigma(d)-{'$'}:
+            if symbol not in delta_dict[state]:
+                delta_dict[state][symbol]={state}
+
+    
     return delta_dict
 
 
