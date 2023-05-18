@@ -204,29 +204,37 @@ def test_delta(d):
             print("Delta verified!")
             return True
         return False
-
-
+    
 def string_validator(string, d):
-    """
-    string_validator verifies if the NFA accepts the string
-    :param string: type string
-    :param d: type dictionary
-    :return: it returns True if string is accepted
-    """
     delta_dict = get_delta(d)
     current_states = get_start(d)
 
+    # Helper function to compute epsilon closure for a set of states
+    def epsilon_closure(states):
+        closure = set(states)
+        stack = list(states)
+        while stack:
+            current_state = stack.pop()
+            if current_state in delta_dict and '$' in delta_dict[current_state]:
+                epsilon_neighbors = delta_dict[current_state]['$']
+                for neighbor in epsilon_neighbors:
+                    if neighbor not in closure:
+                        closure.add(neighbor)
+                        stack.append(neighbor)
+        return closure
+
+    current_states = epsilon_closure(current_states)
+    print(current_states)
     for symbol in string:
+        print(symbol)
         new_states = set()
-        for state in current_states:
-            if '$' in delta_dict[state]:
-                new_states |= delta_dict[state]['$']
-        current_states |= new_states
-        new_states = set()
+        
         for state in current_states:
             if state in delta_dict and symbol in delta_dict[state]:
                 new_states |= delta_dict[state][symbol]
-        current_states = new_states
+        current_states = epsilon_closure(new_states)
+
+    print(current_states)
     current_states &= get_final(d)
 
     if bool(current_states):
