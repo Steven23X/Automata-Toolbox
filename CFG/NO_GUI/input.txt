@@ -1,0 +1,11 @@
+[Variables]
+S1
+[Terminals]
+[    
+]
+[Start]
+S1
+[Rules]
+S1->S1,[,S1,],S1
+S1->[,]
+S1->$
