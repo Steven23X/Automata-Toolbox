@@ -158,9 +158,8 @@ def get_delta(d):
             delta_dict[state] = {}
         for symbol in get_sigma(d)-{'$'}:
             if symbol not in delta_dict[state]:
-                delta_dict[state][symbol]={state}
+                delta_dict[state][symbol] = {state}
 
-    
     return delta_dict
 
 
@@ -204,7 +203,8 @@ def test_delta(d):
             print("Delta verified!")
             return True
         return False
-    
+
+
 def string_validator(string, d):
     delta_dict = get_delta(d)
     current_states = get_start(d)
@@ -224,17 +224,14 @@ def string_validator(string, d):
         return closure
 
     current_states = epsilon_closure(current_states)
-    print(current_states)
     for symbol in string:
-        print(symbol)
         new_states = set()
-        
+
         for state in current_states:
             if state in delta_dict and symbol in delta_dict[state]:
                 new_states |= delta_dict[state][symbol]
         current_states = epsilon_closure(new_states)
 
-    print(current_states)
     current_states &= get_final(d)
 
     if bool(current_states):
